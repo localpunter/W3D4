@@ -29,6 +29,21 @@ class Visit
     @id = visit['id'].to_i
   end
 
+  def location()
+   sql = "SELECT * FROM locations WHERE id = $1"
+   values = [@location_id]
+   location = SqlRunner.run(sql, values).first
+   return Location.new(location)
+  end
+
+  def user()
+   sql = "SELECT * FROM users WHERE id = $1"
+   values = [@user_id]
+   user = SqlRunner.run(sql, values).first
+   return User.new(user)
+ end
+
+
   def self.all()
     sql = "SELECT * FROM visits"
     visits = SqlRunner.run(sql)

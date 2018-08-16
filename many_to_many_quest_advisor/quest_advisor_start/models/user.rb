@@ -25,6 +25,22 @@ class User
     @id = user['id'].to_i
   end
 
+  def locations()
+    sql = "SELECT locations.*
+          FROM locations
+          INNER JOIN visits
+          ON visits.location_id = locations.id
+          WHERE visits.user_id = $1"
+    values = [@id]
+    locations = SqlRunner.run(sql, values)
+    # result = locations.map{ |location| Location.new(location)}
+    # return result
+    result = Location.map_items(location)
+    return result
+  end
+
+
+
   def self.all()
     sql = "SELECT * FROM users"
     values = []

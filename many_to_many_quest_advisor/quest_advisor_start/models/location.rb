@@ -27,11 +27,28 @@ class Location
     @id = location['id'].to_i
   end
 
+  def users()
+    sql = "SELECT users.*
+          FROM users
+          INNER JOIN visits
+          ON visits.user_id = users.id
+          WHERE visits.location_id = $1"
+    values = [@id]
+    users = SqlRunner.run(sql, values)
+    result = users.map {|user| User.new(user)}
+    return result
+  end
+
   def self.all()
     sql = "SELECT * FROM locations"
     values = []
     locations = SqlRunner.run(sql, values)
-    result = locations.map { |location| Location.new( location ) }
+    return self.map_items(locations)
+  end
+
+  def self.map_items(location_data)
+    result = locations_data.map
+    { |location| Location.new( location ) }
     return result
   end
 
